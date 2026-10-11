@@ -1,108 +1,145 @@
 # Super Scraper
 
-**An asynchronous, customizable web scraper for collecting website content and building knowledge bases.**
+**An asynchronous Python web scraper for collecting documentation and building AI-ready knowledge bases.**
 
-Super Scraper is a Python-based web crawling and content extraction project built with `asyncio` and Playwright. It is designed to crawl websites, extract useful page content, and organize the results into a local corpus for research, documentation, and AI-assisted development.
+Super Scraper uses Python, `asyncio`, and Playwright to crawl documentation websites, extract useful content, and save it into a consolidated text file. It prioritizes clean Markdown when available and falls back to browser-based extraction when necessary.
 
-The project aims to make web scraping more configurable, reliable, and accessible, with a beginner-friendly interface planned for easier setup and operation.
+The project currently targets Roblox Creator Documentation and Luau documentation, with configurable crawling behavior defined in the Python source code.
 
 ## Features
 
-- **Asynchronous crawling:** Process multiple pages concurrently using Python's `asyncio`.
-- **Browser-based scraping:** Use Playwright to access and extract content from supported websites.
-- **Configurable concurrency:** Control the number of concurrent browser tasks.
-- **Retry handling:** Retry failed requests with configurable delays.
-- **Crawl state and resuming:** Preserve progress and resume interrupted scraping sessions.
-- **Duplicate prevention:** Normalize canonical URLs to reduce duplicate pages.
-- **Markdown support:** Attempt to retrieve Markdown versions of pages where available.
-- **Content extraction:** Remove common navigation, scripts, footers, cookie notices, and other unwanted page elements.
-- **Keyword-based collection:** Configure keywords to guide the crawling workflow.
-- **Configurable output:** Choose the seed URLs and output location.
-- **Error logging:** Record scraping errors for troubleshooting.
-- **Robots.txt awareness:** Check applicable crawling rules before accessing pages.
+- **Asynchronous crawling** — Processes multiple pages concurrently.
+- **Playwright integration** — Extracts content from browser-rendered pages.
+- **Markdown-first extraction** — Attempts to retrieve clean Markdown before using browser rendering.
+- **Content cleaning** — Removes common navigation elements, scripts, cookie notices, and other page clutter.
+- **Robots.txt awareness** — Checks crawling rules before accessing pages.
+- **Retry handling** — Retries failed operations with configurable delays.
+- **Duplicate prevention** — Tracks visited pages and normalizes URLs.
+- **Concurrency controls** — Limits simultaneous browser workers.
+- **Error logging** — Records failed URLs and exception details.
+- **Knowledge base output** — Combines collected content into a single text file suitable for research and AI-assisted development.
 
-## Use Cases
+## Current scope
 
-- Building documentation knowledge bases.
-- Collecting publicly available technical documentation.
-- Researching website content.
-- Organizing resources for AI-assisted coding workflows.
-- Exploring supported websites for development and testing.
+The default configuration targets:
+
+- [Roblox Creator Documentation](https://create.roblox.com/docs)
+- [Luau Documentation](https://luau-lang.org/)
+
+The crawler uses an allowlist of domains and permitted URL paths. Other websites are not automatically supported simply by changing the starting URL; the relevant configuration and URL filtering logic may also need to be updated.
 
 ## Requirements
 
-- Python 3
+- Python 3.10 or newer recommended.
+- pip
 - Playwright
-- A supported browser installation
-- Internet access for websites you are authorized to access
+- Chromium installed through Playwright
+- An internet connection
 
-Install the project's dependencies using its dependency file if one is provided.
+## Installation
 
-If Playwright is not installed, the usual setup is:
+### 1. Clone the repository
 
 ```bash
-pip install playwright
-playwright install
+git clone https://github.com/aku-hunts/Webscraper.git
+cd Webscraper
 ```
 
-Check the repository's actual dependency list and Python version requirements before running the scraper.
+### 2. Create a virtual environment
 
-## Configuration
+**Windows PowerShell:**
 
-The scraper is designed to support options such as:
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-| Option | Purpose |
+If PowerShell blocks activation, you can run the commands below using the virtual environment's Python executable directly.
+
+### 3. Install dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 4. Install the browser
+
+```bash
+python -m playwright install chromium
+```
+
+## Usage
+
+Start the scraper with:
+
+```bash
+python super_scraper.py
+```
+
+The current version reads its default URLs and crawl settings from the configuration section near the beginning of `super_scraper.py`.
+
+You can adjust settings such as:
+
+- Starting URLs
+- Allowed domains and paths
+- Maximum pages per crawl
+- Number of concurrent workers
+- Request delays
+- Navigation timeout
+- Retry attempts and retry delays
+- Output and error-log filenames
+
+These settings currently require editing the source code. A beginner-friendly graphical interface and command-line configuration are planned improvements, not existing features.
+
+## Output files
+
+By default, the scraper generates:
+
+| File | Purpose |
 |---|---|
-| `--url` | Add a starting URL; can be supplied multiple times |
-| `--keywords` | Configure keywords |
-| `--output` | Choose the output file |
-| `--max-pages` | Set the maximum page count |
-| `--locale` | Set a documentation locale |
-| `--all-locales` | Enable supported locale crawling |
-| `--restart` | Restart a crawl |
-| `--clear-state` | Clear saved crawl state |
+| `roblox_knowledge_base.txt` | Consolidated extracted content |
+| `scraping_errors.log` | Errors and exception details from failed operations |
 
-Run the script's help command to confirm the available arguments and their exact syntax.
+Generated files are local outputs and should generally not be committed to the repository.
 
-## Output
+## Responsible crawling
 
-The default configuration uses files such as:
+Use Super Scraper only on websites you are authorized to access.
 
-- `roblox_knowledge_base.txt` — collected content.
-- `.errors.log` — scraping errors.
-- `.state.json` — saved crawl state for resuming.
+- Review the target website's terms and applicable laws.
+- Respect `robots.txt` rules and access restrictions.
+- Use reasonable request delays and concurrency.
+- Do not attempt to bypass authentication, paywalls, CAPTCHAs, or other access controls.
+- Review a website's policies before adapting the crawler to a new domain.
 
-These filenames may vary depending on your configuration.
-
-## Responsible Crawling
-
-Only crawl websites you have permission to access and follow applicable laws, website terms, and access restrictions.
-
-Super Scraper is designed to respect `robots.txt` crawling rules. Use reasonable concurrency and request delays, avoid overwhelming servers, and do not attempt to bypass authentication, paywalls, CAPTCHAs, or technical access controls.
+Robots.txt is a crawler guidance mechanism, not a substitute for permission or legal review.
 
 ## Roadmap
 
-- [ ] Beginner-friendly desktop interface.
-- [ ] Start, pause, resume, and stop controls.
-- [ ] Live progress reporting and crawl statistics.
-- [ ] Easy configuration for starting URLs, limits, and output formats.
-- [ ] Export to formats such as JSON, CSV, and Markdown.
-- [ ] Improved content filtering and extraction options.
-- [ ] Clear error messages and recovery tools.
-- [ ] Documentation, tests, and contributor guidelines.
+Planned improvements include:
 
-Roadmap items represent planned work, not necessarily current functionality.
+- [ ] Beginner-friendly graphical interface
+- [ ] Start, pause, resume, and stop controls
+- [ ] Configurable starting URLs without editing source code
+- [ ] Live progress tracking and crawl statistics
+- [ ] Additional export formats, including JSON and Markdown
+- [ ] Improved site configuration and content filtering
+- [ ] Better recovery and error reporting
+- [ ] Automated tests and continuous integration
+- [ ] More comprehensive installation and usage documentation
+
+Roadmap items are planned features and may change as development progresses.
 
 ## Contributing
 
-Contributions, bug reports, feature requests, and documentation improvements are welcome.
+Contributions, bug reports, and suggestions are welcome.
 
-Before opening a pull request, explain the problem being solved, describe the changes, and include testing details where possible.
+When submitting changes, describe the problem, explain the proposed solution, and include testing details where possible.
 
 ## License
 
-A license has not been specified here. Add a `LICENSE` file before presenting the project as open source, and choose a license that matches your intentions.
+Super Scraper is released under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-**Built for developers who want to collect, organize, and work with web content more efficiently.**
+**Built by [Akurocks](https://github.com/aku-hunts).**
