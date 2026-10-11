@@ -218,3 +218,27 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Super Scraper generated files
+roblox_knowledge_base.txt
+*.errors.log
+*.state.json
+
+# Browser automation
+playwright/.cache/
+.artifacts/
+
+# Local output and temporary files
+output/
+logs/
+tmp/
+temp/
+
+# Local configuration and secrets
+.env.*
+!.env.example
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
